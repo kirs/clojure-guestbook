@@ -8,7 +8,7 @@
                  [org.clojure/java.jdbc "0.2.3"]
                  [org.xerial/sqlite-jdbc "3.7.2"]]
   :plugins [[lein-ring "0.8.10"]]
-  :main guestbook.handler/app
+  :main guestbook.handler
   :ring {:handler guestbook.handler/app
          :init guestbook.handler/init
          :destroy guestbook.handler/destroy}
