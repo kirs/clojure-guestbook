@@ -6,6 +6,7 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [guestbook.models.db :as db]
+            [ring.adapter.jetty]
             [guestbook.routes.home :refer [home-routes]]))
 
 (defn init []
@@ -23,4 +24,6 @@
       (handler/site)
       (wrap-base-url)))
 
-
+(defn -main []
+  (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
+    (ring.adapter.jetty/run-jetty app {:port port})))
