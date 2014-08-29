@@ -11,24 +11,21 @@
 
 (defn show-guests []
   [:ul.guests
-    (for [message
-      (db/read-messages)]
+    (for [message (db/read-messages)]
     [:li
-      [:bloquote message]])])
-      ; [:p "-" [:cite name]]
-      ; [:time (format-time timestamp)]])])
+      [:bloquote (:message message)]
+      [:p "-" [:cite (:author message)]]])])
 
-(defn home [& [name message error]]
+(defn home [& [author message error]]
   (layout/common
     [:h1 "Hello World!"]
     [:p "welcome"]
     [:p error]
     (show-guests)
     [:hr]
-    ; [:form
     (form-to [:post "/"]
-      [:p "Name:"]
-      (text-field "name" name)
+      [:p "Author:"]
+      (text-field "author" author)
       [:p "Message:"]
       (text-area {:rows 10 :cold 40} "message" message)
       [:br]
@@ -38,19 +35,19 @@
   (layout/common
     [:h1 "pinged!"]))
 
-(defn save-message [name message]
+(defn save-message [author message]
   (cond
-    ; (empty? name)
-    ; (home name message "Forgot name")
+    (empty? author)
+    (home author message "Forgot author")
     (empty? message)
-    (home name message "No message")
+    (home author message "No message")
     :else
       (do
-        ; (println name message)
-        (db/create-message message)
+        (println author message)
+        (db/insert-message author message)
         (home))))
 
 (defroutes home-routes
   (GET "/" [] (home))
-  (POST "/" [name message] (save-message name message)))
+  (POST "/" [author message] (save-message author message)))
 
